@@ -51,6 +51,10 @@ ipch/
 *.sdf
 *.cachefile
 
+# NuGet files
+packages/*
+*.nupkg
+
 # Visual Studio profiler
 *.psess
 *.vsp
