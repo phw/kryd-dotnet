@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2013 Philipp Wolfer <ph.wolfer@gmail.com>
+ * Licensed under the MIT license.
+ * See the file LICENSE.txt for copying permission.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
