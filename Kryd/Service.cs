@@ -20,6 +20,20 @@ namespace Kryd
         private string apiKey;
         private string sessionId;
 
+        private HttpClient httpClient;
+        protected HttpClient HttpClient
+        {
+            get
+            {
+                if (this.httpClient == null)
+                {
+                    this.httpClient = new HttpClient();
+                }
+
+                return this.httpClient;
+            }
+        }
+
         public Service(string accountId, string apiKey, string sessionId)
         {
             this.accountId = accountId;
@@ -29,11 +43,9 @@ namespace Kryd
 
         public async Task<HttpResponseMessage> SendEvent(string eventType, IDictionary<string, string> options) 
         {
-            var httpClient = new HttpClient();
-            
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             request.Content = GetRequestContent(eventType, options);
-            var response = await httpClient.SendAsync(request);
+            var response = await HttpClient.SendAsync(request);
             return response;
         }
 
