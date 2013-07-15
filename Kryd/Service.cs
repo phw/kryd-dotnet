@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Kryd
 {
-    public class Kryd
+    public class Service
     {
         private static Uri endpointUrl = new Uri("https://api.kryd.com/event.lua");
 
@@ -20,7 +20,7 @@ namespace Kryd
         private string apiKey;
         private string sessionId;
 
-        public Kryd(string accountId, string apiKey, string sessionId)
+        public Service(string accountId, string apiKey, string sessionId)
         {
             this.accountId = accountId;
             this.apiKey = apiKey;
@@ -43,8 +43,12 @@ namespace Kryd
             AddParameter(parameters, "accountid", this.accountId);
             AddParameter(parameters, "sessionid", this.sessionId);
             AddParameter(parameters, "eventtype", eventType);
-            AddParameter(parameters, "options", JsonConvert.SerializeObject(options));
             AddParameter(parameters, "key", this.apiKey);
+            if (options != null)
+            {
+                AddParameter(parameters, "options", JsonConvert.SerializeObject(options));
+            }
+
             return new FormUrlEncodedContent(parameters);
         }
 
