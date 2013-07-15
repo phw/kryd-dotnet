@@ -6,6 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -47,6 +49,67 @@ namespace Kryd
             request.Content = GetRequestContent(eventType, options);
             var response = await HttpClient.SendAsync(request);
             return response;
+        }
+
+        public async Task<HttpResponseMessage> SendLoginEvent()
+        {
+            return await this.SendEvent("login", null);
+        }
+
+        public async Task<HttpResponseMessage> SendRegisterEvent()
+        {
+            return await this.SendEvent("register", null);
+        }
+
+        public async Task<HttpResponseMessage> SendIdentifyEvent(string firstname, string lastname, string email, string salutation)
+        {
+            var options = new Dictionary<string, string>
+            {
+                { "firstname", firstname },
+                { "lastname", lastname },
+                { "email", email },
+                { "salutation", salutation.ToUpper() == "M" ? "M" : "F" },
+            };
+
+            return await this.SendEvent("identify", options);
+        }
+
+        public async Task<HttpResponseMessage> SendItemviewEvent(string itemid)
+        {
+            var options = new Dictionary<string, string>
+            {
+                { "itemview", itemid },
+            };
+
+            return await this.SendEvent("basket", options);
+        }
+
+        public async Task<HttpResponseMessage> SendBasketEvent(params string[] itemids)
+        {
+            IDictionary<string, string> options = null;
+            if (itemids != null && itemids.Length > 0)
+            {
+                options = new Dictionary<string, string>
+                {
+                    { "itemids", string.Join(";", itemids.Distinct()) },
+                };
+            }
+
+            return await this.SendEvent("basket", options);
+        }
+
+        public async Task<HttpResponseMessage> SendCompleteEvent(decimal? orderValue = null)
+        {
+            IDictionary<string, string> options = null;
+            if (orderValue.HasValue)
+            {
+                options = new Dictionary<string, string>
+                {
+                    { "order_value", orderValue.Value.ToString("#.00", CultureInfo.InvariantCulture) },
+                };
+            }
+
+            return await this.SendEvent("complete", options);
         }
 
         private FormUrlEncodedContent GetRequestContent(string eventType, IDictionary<string, string> options)
