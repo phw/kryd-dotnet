@@ -47,18 +47,18 @@ namespace Kryd
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             request.Content = GetRequestContent(eventType, options);
-            var response = await HttpClient.SendAsync(request);
+            var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
             return response;
         }
 
         public async Task<HttpResponseMessage> SendLoginEvent()
         {
-            return await this.SendEvent("login", null);
+            return await this.SendEvent("login", null).ConfigureAwait(false);
         }
 
         public async Task<HttpResponseMessage> SendRegisterEvent()
         {
-            return await this.SendEvent("register", null);
+            return await this.SendEvent("register", null).ConfigureAwait(false);
         }
 
         public async Task<HttpResponseMessage> SendIdentifyEvent(string firstname, string lastname, string email, string salutation)
@@ -71,7 +71,7 @@ namespace Kryd
                 { "salutation", salutation.ToUpper() == "M" ? "M" : "F" },
             };
 
-            return await this.SendEvent("identify", options);
+            return await this.SendEvent("identify", options).ConfigureAwait(false);
         }
 
         public async Task<HttpResponseMessage> SendItemviewEvent(string itemid)
@@ -81,7 +81,7 @@ namespace Kryd
                 { "itemview", itemid },
             };
 
-            return await this.SendEvent("basket", options);
+            return await this.SendEvent("basket", options).ConfigureAwait(false);
         }
 
         public async Task<HttpResponseMessage> SendBasketEvent(params string[] itemids)
@@ -95,7 +95,7 @@ namespace Kryd
                 };
             }
 
-            return await this.SendEvent("basket", options);
+            return await this.SendEvent("basket", options).ConfigureAwait(false);
         }
 
         public async Task<HttpResponseMessage> SendCompleteEvent(decimal? orderValue = null)
@@ -109,7 +109,7 @@ namespace Kryd
                 };
             }
 
-            return await this.SendEvent("complete", options);
+            return await this.SendEvent("complete", options).ConfigureAwait(false);
         }
 
         private FormUrlEncodedContent GetRequestContent(string eventType, IDictionary<string, string> options)
