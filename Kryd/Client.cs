@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Kryd
 {
-    public class Service
+    public class Client
     {
         private static Uri endpointUrl = new Uri("https://api.kryd.com/event.lua");
 
@@ -36,7 +36,7 @@ namespace Kryd
             }
         }
 
-        public Service(string accountId, string apiKey, string sessionId)
+        public Client(string accountId, string apiKey, string sessionId)
         {
             this.accountId = accountId;
             this.apiKey = apiKey;
